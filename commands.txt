@@ -1,0 +1,10 @@
+awslocal sqs create-queue --queue-name notification-payment-queue
+
+awslocal sns create-topic --name new-payment-sns
+
+awslocal dynamodb create-table --cli-input-json file://create-table-payment-notification.json --endpoint-url http://localhost:8000
+
+awslocal sns subscribe --topic-arn "arn:aws:sns:us-east-1:000000000000:new-payment-sns" --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:notification-payment-queue --attributes '{"RawMessageDelivery": "true"}'
+
+
+
